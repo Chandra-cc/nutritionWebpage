@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutrition Results</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow-x: auto; /* Allow horizontal scrolling if needed */
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #333;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            overflow-x: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+            table-layout: auto; /* Adjust column width dynamically */
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+            font-size: 1em; /* Set text size to a more reasonable size */
+            word-wrap: break-word; /* Allow long words to wrap inside cells */
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
+        td {
+            background-color: #f9f9f9;
+        }
+        tr:nth-child(even) td {
+            background-color: #f1f1f1;
+        }
+        tr:hover {
+            background-color: #e0e0e0;
+        }
+        .error {
+            color: red;
+            font-size: 1.3em;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .back-link {
+            display: block;
+            margin-top: 30px;
+            text-align: center;
+            font-size: 1.2em;
+            color: #007BFF;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive styles for smaller screens */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+            h2 {
+                font-size: 1.5em;
+            }
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            th, td {
+                padding: 8px;
+                font-size: 0.9em;
+            }
+        }
+
+        /* Make it even more responsive for very small screens */
+        @media (max-width: 480px) {
+            table {
+                font-size: 0.8em; /* Adjust font size */
+            }
+            th, td {
+                padding: 6px;
+            }
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Search Results</h1>
+
+        {% if result.error %}
+            <p class="error">{{ result.error }}</p>
+        {% else %}
+            <h2>Nutrition Information</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Food</th>
+                        <th>Quantity</th>
+                        <th>Calories</th>
+                        <th>Protein (g)</th>
+                        <th>Carbohydrates (g)</th>
+                        <th>Fat (g)</th>
+                        <th>Fiber (g)</th>
+                        <th>Sodium (mg)</th>
+                        <th>Potassium (mg)</th>
+                        <th>Sugar (g)</th>
+                        <th>Vitamin A (%)</th>
+                        <th>Vitamin C (%)</th>
+                        <th>Calcium (%)</th>
+                        <th>Iron (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in result.results %}
+                        <tr>
+                            <td>{{ item.Food }}</td>
+                            <td>{{ item.Quantity }}</td>
+                            <td>{{ item.Calories }}</td>
+                            <td>{{ item.Protein }}</td>
+                            <td>{{ item.Carbohydrates }}</td>
+                            <td>{{ item.Fat }}</td>
+                            <td>{{ item.Fiber }}</td>
+                            <td>{{ item.Sodium }}</td>
+                            <td>{{ item.Potassium }}</td>
+                            <td>{{ item.Sugar }}</td>
+                            <td>{{ item['Vitamin A'] }}</td>
+                            <td>{{ item['Vitamin C'] }}</td>
+                            <td>{{ item.Calcium }}</td>
+                            <td>{{ item.Iron }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+        
+        <br>
+        <a href="/" class="back-link">Back to Search</a>
+    </div>
+</body>
+</html>
