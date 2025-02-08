@@ -10,52 +10,61 @@
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #f4f4f9;
-            overflow-x: hidden;
+            background-color: #f8f9fa;
             color: #333;
+            display: flex;
+            justify-content: center;
         }
         .container {
             max-width: 1200px;
-            margin: 0 auto;
+            width: 100%;
             padding: 20px;
             background-color: white;
             border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            overflow-x: auto;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
         h1 {
-            text-align: center;
-            color: #333;
+            color: #2c3e50;
             font-size: 2.5em;
             margin-bottom: 20px;
         }
         h2 {
-            color: #333;
+            color: #34495e;
             font-size: 1.8em;
-            margin-bottom: 10px;
-            text-align: center;
+            margin-bottom: 15px;
+        }
+        .error {
+            color: red;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        
+        /* Table Styling */
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin: 20px 0;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-            table-layout: auto;
-        }
-        table, th, td {
-            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
         th, td {
             padding: 12px;
             text-align: center;
             font-size: 1em;
-            white-space: nowrap;
         }
         th {
-            background-color: #4CAF50;
+            background-color: #27ae60;
             color: white;
             font-weight: bold;
+            position: sticky;
+            top: 0;
+            z-index: 1;
         }
         td {
             background-color: #fafafa;
@@ -64,27 +73,10 @@
             background-color: #f1f1f1;
         }
         tr:hover {
-            background-color: #e0e0e0;
-        }
-        .error {
-            color: red;
-            font-size: 1.3em;
-            text-align: center;
-            margin-top: 20px;
-        }
-        .back-link {
-            display: block;
-            margin-top: 30px;
-            text-align: center;
-            font-size: 1.2em;
-            color: #007BFF;
-            text-decoration: none;
-        }
-        .back-link:hover {
-            text-decoration: underline;
+            background-color: #dff0d8;
         }
 
-        /* Make the table scrollable on small screens */
+        /* Responsive Table */
         @media (max-width: 768px) {
             table {
                 display: block;
@@ -92,35 +84,49 @@
                 white-space: nowrap;
             }
             th, td {
+                font-size: 0.9em;
                 padding: 10px;
-                font-size: 0.8em;
             }
         }
-        /* Styling for the top 5 results section */
+
+        /* Nutrition Cards */
         .top-results-section {
-            background-color: #f8f9fa;
-            padding: 15px;
+            background-color: #f4f6f7;
+            padding: 20px;
             margin-top: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .top-results-section h2 {
-            margin-bottom: 15px;
-            font-size: 1.5em;
+            text-align: left;
         }
         .result-item {
-            margin-bottom: 15px;
+            background: white;
             padding: 15px;
-            background-color: #ffffff;
+            margin-bottom: 15px;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
         .result-item:hover {
-            background-color: #f1f1f1;
+            background-color: #ecf0f1;
         }
         .similarity-score {
             font-weight: bold;
-            color: #4CAF50;
+            color: #27ae60;
+        }
+
+        /* Back to Search Button */
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            color: white;
+            background-color: #007BFF;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+        .back-link:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -133,48 +139,50 @@
         {% else %}
             <div class="top-results-section">
                 <h2>Top 5 Matched Nutrition Information</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Food</th>
-                            <th>Serving</th>
-                            <th>Similarity Score</th>
-                            <th>Calories</th>
-                            <th>Protein (g)</th>
-                            <th>Carbohydrates (g)</th>
-                            <th>Fat (g)</th>
-                            <th>Fiber (g)</th>
-                            <th>Sodium (mg)</th>
-                            <th>Potassium (mg)</th>
-                            <th>Sugar (g)</th>
-                            <th>Vitamin A (%)</th>
-                            <th>Vitamin C (%)</th>
-                            <th>Calcium (%)</th>
-                            <th>Iron (%)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for item in result.results %}
-                        <tr>
-                            <td>{{ item.food }}</td>
-                            <td>{{ item.nutrition.Serving }}</td> <!-- Added Serving Column -->
-                            <td>{{ item.similarity_score }}</td>
-                            <td>{{ item.nutrition.Calories }}</td>
-                            <td>{{ item.nutrition.Protein }}</td>
-                            <td>{{ item.nutrition.Carbohydrates }}</td>
-                            <td>{{ item.nutrition.Fat }}</td>
-                            <td>{{ item.nutrition.Fiber }}</td>
-                            <td>{{ item.nutrition.Sodium }}</td>
-                            <td>{{ item.nutrition.Potassium }}</td>
-                            <td>{{ item.nutrition.Sugar }}</td>
-                            <td>{{ item.nutrition['Vitamin A'] }}</td>
-                            <td>{{ item.nutrition['Vitamin C'] }}</td>
-                            <td>{{ item.nutrition.Calcium }}</td>
-                            <td>{{ item.nutrition.Iron }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Food</th>
+                                <th>Serving</th>
+                                <th>Similarity Score</th>
+                                <th>Calories</th>
+                                <th>Protein (g)</th>
+                                <th>Carbs (g)</th>
+                                <th>Fat (g)</th>
+                                <th>Fiber (g)</th>
+                                <th>Sodium (mg)</th>
+                                <th>Potassium (mg)</th>
+                                <th>Sugar (g)</th>
+                                <th>Vitamin A (%)</th>
+                                <th>Vitamin C (%)</th>
+                                <th>Calcium (%)</th>
+                                <th>Iron (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in result.results %}
+                            <tr>
+                                <td>{{ item.food }}</td>
+                                <td>{{ item.nutrition.Serving }}</td>
+                                <td>{{ item.similarity_score }}</td>
+                                <td>{{ item.nutrition.Calories }}</td>
+                                <td>{{ item.nutrition.Protein }}</td>
+                                <td>{{ item.nutrition.Carbohydrates }}</td>
+                                <td>{{ item.nutrition.Fat }}</td>
+                                <td>{{ item.nutrition.Fiber }}</td>
+                                <td>{{ item.nutrition.Sodium }}</td>
+                                <td>{{ item.nutrition.Potassium }}</td>
+                                <td>{{ item.nutrition.Sugar }}</td>
+                                <td>{{ item.nutrition['Vitamin A'] }}</td>
+                                <td>{{ item.nutrition['Vitamin C'] }}</td>
+                                <td>{{ item.nutrition.Calcium }}</td>
+                                <td>{{ item.nutrition.Iron }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <div class="top-results-section">
@@ -182,7 +190,7 @@
                 {% for item in result.results %}
                 <div class="result-item">
                     <p><strong>Food:</strong> {{ item.food }}</p>
-                    <p><strong>Serving:</strong> {{ item.nutrition.Serving }}</p> <!-- Display Serving and Unit -->
+                    <p><strong>Serving:</strong> {{ item.nutrition.Serving }}</p>
                     <p><span class="similarity-score">Similarity Score:</span> {{ item.similarity_score }}</p>
                     <p><strong>Calories:</strong> {{ item.nutrition.Calories }} kcal</p>
                     <p><strong>Protein:</strong> {{ item.nutrition.Protein }} g</p>
@@ -191,17 +199,11 @@
                     <p><strong>Fiber:</strong> {{ item.nutrition.Fiber }} g</p>
                     <p><strong>Sodium:</strong> {{ item.nutrition.Sodium }} mg</p>
                     <p><strong>Potassium:</strong> {{ item.nutrition.Potassium }} mg</p>
-                    <p><strong>Sugar:</strong> {{ item.nutrition.Sugar }} g</p>
-                    <p><strong>Vitamin A:</strong> {{ item.nutrition['Vitamin A'] }} %</p>
-                    <p><strong>Vitamin C:</strong> {{ item.nutrition['Vitamin C'] }} %</p>
-                    <p><strong>Calcium:</strong> {{ item.nutrition.Calcium }} %</p>
-                    <p><strong>Iron:</strong> {{ item.nutrition.Iron }} %</p>
                 </div>
                 {% endfor %}
             </div>
         {% endif %}
 
-        <br>
         <a href="/" class="back-link">Back to Search</a>
     </div>
 </body>
